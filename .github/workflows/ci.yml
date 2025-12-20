@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 name: Continuous Integration
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,7 +33,7 @@ jobs:
           key: inspectcode-${{ hashFiles('.config/dotnet-tools.json', '.github/workflows/ci.yml', 'osu.sln*', 'osu*.slnf', '.editorconfig', '.globalconfig', 'CodeAnalysis/*', '**/*.csproj', '**/*.props') }}
 
       - name: Dotnet code style
-        run: dotnet build -c Debug -warnaserror osu.Desktop.slnf -p:EnforceCodeStyleInBuild=true
+        run: dotnet build -c Release -warnaserror osu.Desktop.slnf -p:EnforceCodeStyleInBuild=true
 
       - name: CodeFileSanity
         run: |
@@ -79,18 +79,18 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Compile
-        run: dotnet build -c Debug -warnaserror osu.Desktop.slnf
+        run: dotnet build -c Release -warnaserror osu.Desktop.slnf
 
       - name: Test
         run: >
           dotnet test
-          osu.Game.Tests/bin/Debug/**/osu.Game.Tests.dll
-          osu.Game.Rulesets.Osu.Tests/bin/Debug/**/osu.Game.Rulesets.Osu.Tests.dll
-          osu.Game.Rulesets.Taiko.Tests/bin/Debug/**/osu.Game.Rulesets.Taiko.Tests.dll
-          osu.Game.Rulesets.Catch.Tests/bin/Debug/**/osu.Game.Rulesets.Catch.Tests.dll
-          osu.Game.Rulesets.Mania.Tests/bin/Debug/**/osu.Game.Rulesets.Mania.Tests.dll
-          osu.Game.Tournament.Tests/bin/Debug/**/osu.Game.Tournament.Tests.dll
-          Templates/**/*.Tests/bin/Debug/**/*.Tests.dll
+          osu.Game.Tests/bin/Release/**/osu.Game.Tests.dll
+          osu.Game.Rulesets.Osu.Tests/bin/Release/**/osu.Game.Rulesets.Osu.Tests.dll
+          osu.Game.Rulesets.Taiko.Tests/bin/Release/**/osu.Game.Rulesets.Taiko.Tests.dll
+          osu.Game.Rulesets.Catch.Tests/bin/Release/**/osu.Game.Rulesets.Catch.Tests.dll
+          osu.Game.Rulesets.Mania.Tests/bin/Release/**/osu.Game.Rulesets.Mania.Tests.dll
+          osu.Game.Tournament.Tests/bin/Release/**/osu.Game.Tournament.Tests.dll
+          Templates/**/*.Tests/bin/Release/**/*.Tests.dll
           --logger "trx;LogFileName=TestResults-${{matrix.os.prettyname}}-${{matrix.threadingMode}}.trx"
           --
           NUnit.ConsoleOut=0
@@ -103,6 +103,16 @@ jobs:
         with:
           name: osu-test-results-${{matrix.os.prettyname}}-${{matrix.threadingMode}}
           path: ${{github.workspace}}/TestResults/TestResults-${{matrix.os.prettyname}}-${{matrix.threadingMode}}.trx
+      - name: Upload Desktop build artifacts  
+          uses: actions/upload-artifact@v4  
+            if: always()  
+            with:  
+              name: osu-desktop-${{matrix.os.prettyname}}-release  
+              path: |  
+                osu.Desktop/bin/Release/net8.0/osu!.exe  
+                osu.Desktop/bin/Release/net8.0/osu!.dll  
+                osu.Desktop/bin/Release/net8.0/**/*  
+              retention-days: 30
 
   build-only-android:
     name: Build only (Android)
@@ -127,7 +137,16 @@ jobs:
         run: dotnet workload install android
 
       - name: Compile
-        run: dotnet build -c Debug osu.Android.slnf
+        run: dotnet build -c Release osu.Android.slnf
+      - name: Upload Android build artifacts  
+        uses: actions/upload-artifact@v4  
+        if: always()  
+        with:  
+          name: osu-android-release  
+          path: |  
+            osu.Android/bin/Release/net8.0-android/*.apk  
+            osu.Android/bin/Release/net8.0-android/**/*  
+          retention-days: 30
 
   build-only-ios:
     name: Build only (iOS)
@@ -151,4 +170,14 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
 
       - name: Build
-        run: dotnet build -c Debug osu.iOS.slnf
+        run: dotnet build -c Release osu.iOS.slnf
+
+      - name: Upload iOS build artifacts  
+        uses: actions/upload-artifact@v4  
+        if: always()  
+        with:  
+          name: osu-ios-release  
+          path: |  
+            osu.iOS/bin/Release/net8.0-ios/*.app  
+            osu.iOS/bin/Release/net8.0-ios/**/*.ipa  
+          retention-days: 30
