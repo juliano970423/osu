@@ -150,7 +150,7 @@ jobs:
 
   build-only-ios:
     name: Build only (iOS)
-    runs-on: macos-15
+    runs-on: macos-15-large
     timeout-minutes: 200
     steps:
       - name: Checkout
