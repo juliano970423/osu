@@ -6,8 +6,9 @@
          It only warns about not copying the library to the app bundle to save space,
          so there's nothing to be worried about. -->
     <NoWarn>$(NoWarn);MT7091</NoWarn>
-<PublishTrimmed>false</PublishTrimmed>  
-  <PublishAot>false</PublishAot>  
+  <PublishTrimmed>true</PublishTrimmed>  
+  <MtouchLink>None</MtouchLink>  
+  <PublishAot>false</PublishAot> 
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <!-- On debug configurations, we use Mono interpreter for faster compilation. -->
