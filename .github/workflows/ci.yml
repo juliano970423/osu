@@ -104,15 +104,15 @@ jobs:
           name: osu-test-results-${{matrix.os.prettyname}}-${{matrix.threadingMode}}
           path: ${{github.workspace}}/TestResults/TestResults-${{matrix.os.prettyname}}-${{matrix.threadingMode}}.trx
       - name: Upload Desktop build artifacts  
-          uses: actions/upload-artifact@v4  
-            if: always()  
-            with:  
-              name: osu-desktop-${{matrix.os.prettyname}}-release  
-              path: |  
-                osu.Desktop/bin/Release/net8.0/osu!.exe  
-                osu.Desktop/bin/Release/net8.0/osu!.dll  
-                osu.Desktop/bin/Release/net8.0/**/*  
-              retention-days: 30
+        uses: actions/upload-artifact@v4  
+        if: always()  
+        with:  
+          name: osu-desktop-${{matrix.os.prettyname}}-release  
+          path: |  
+            osu.Desktop/bin/Release/net8.0/osu!.exe  
+            osu.Desktop/bin/Release/net8.0/osu!.dll  
+            osu.Desktop/bin/Release/net8.0/**/*  
+          retention-days: 30
 
   build-only-android:
     name: Build only (Android)
