@@ -169,14 +169,14 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
 
       - name: Build
-        run: dotnet build -c Release osu.iOS.slnf /p:MaxCpuCount=1
+        run: dotnet build -c Debug osu.iOS.slnf
 
       - name: Upload iOS build artifacts  
         uses: actions/upload-artifact@v4  
         if: always()  
         with:  
-          name: osu-ios-release  
+          name: osu-ios-debug 
           path: |  
-            osu.iOS/bin/Release/net8.0-ios/*.app  
-            osu.iOS/bin/Release/net8.0-ios/**/*.ipa  
+            osu.iOS/bin/Debug/net8.0-ios/*.app  
+            osu.iOS/bin/Debug/net8.0-ios/**/*.ipa  
           retention-days: 30
