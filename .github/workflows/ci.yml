@@ -169,7 +169,7 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
 
       - name: Build
-        run: dotnet build -c Release osu.iOS.slnf /p:MtouchInterpreter=all /p:BuildIpa=true /p:PublishTrimmed=false /p:EnableLLVM=false /p:ArchiveOnBuild=true
+        run: dotnet build -c Release osu.iOS.slnf /p:MtouchInterpreter=all /p:BuildIpa=true /p:MtouchLink=None /p:EnableLLVM=false /p:ArchiveOnBuild=true
 
       - name: Upload iOS build artifacts  
         uses: actions/upload-artifact@v4  
