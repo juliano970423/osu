@@ -151,7 +151,6 @@ jobs:
   build-only-ios:
     name: Build only (iOS)
     runs-on: macos-latest
-    timeout-minutes: 200
     steps:
       - name: Checkout
         uses: actions/checkout@v4
