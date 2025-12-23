@@ -178,5 +178,7 @@ jobs:
           name: osu-ios-release
           path: |  
             osu.iOS/bin/Release/net8.0-ios/*.app  
-            osu.iOS/bin/Release/net8.0-ios/**/*.ipa  
+            osu.iOS/bin/Release/net8.0-ios/**/*.ipa
+            osu.iOS/bin/Release/net8.0-ios/*.ipa
+            osu.iOS/bin/Release/net8.0-ios/**/*.app
           retention-days: 30
